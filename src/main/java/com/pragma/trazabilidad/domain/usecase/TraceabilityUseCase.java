@@ -7,6 +7,7 @@ import com.pragma.trazabilidad.domain.model.Traceability;
 import com.pragma.trazabilidad.domain.model.TraceabilityGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Date;
@@ -16,6 +17,8 @@ public class TraceabilityUseCase {
 
     @Autowired
     TraceabilityGateway traceabilityGateway;
+
+    private static final String PEDIDO_ENTREGADO = "ENTREGADO";
 
     public Mono<Traceability> createTraceabilityForOrder(TraceabilityRequestDto traceabilityRequestDto) {
         return traceabilityGateway.findTraceabilityByOrderId(traceabilityRequestDto.getOrderId())
@@ -39,4 +42,7 @@ public class TraceabilityUseCase {
         return traceabilityGateway.findTraceabilityByOrderId(orderId);
     }
 
+    public Flux<Traceability> getAllCompletedTraceability() {
+        return traceabilityGateway.findAllByNewStatusIsLike(PEDIDO_ENTREGADO);
+    }
 }
