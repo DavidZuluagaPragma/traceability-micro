@@ -5,6 +5,7 @@ import com.pragma.trazabilidad.domain.model.Traceability;
 import com.pragma.trazabilidad.domain.model.TraceabilityGateway;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -24,6 +25,12 @@ public class TraceabilityService implements TraceabilityGateway {
     public Mono<Traceability> findTraceabilityByOrderId(Integer orderId) {
         return traceabilityRepository.findByOrderId(orderId)
                 .defaultIfEmpty(TraceabilityData.builder().build())
+                .map(Mapper::traceabilityDataToTraceability);
+    }
+
+    @Override
+    public Flux<Traceability> findAllByNewStatusIsLike(String status) {
+        return traceabilityRepository.findAllByNewStatusIsLike(status)
                 .map(Mapper::traceabilityDataToTraceability);
     }
 }
