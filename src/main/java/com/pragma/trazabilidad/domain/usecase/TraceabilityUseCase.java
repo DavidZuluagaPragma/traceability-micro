@@ -18,7 +18,7 @@ public class TraceabilityUseCase {
     @Autowired
     TraceabilityGateway traceabilityGateway;
 
-    private static final String PEDIDO_ENTREGADO = "ENTREGADO";
+    private static final String DELIVERED = "DELIVERED";
 
     public Mono<Traceability> createTraceabilityForOrder(TraceabilityRequestDto traceabilityRequestDto) {
         return traceabilityGateway.findTraceabilityByOrderId(traceabilityRequestDto.getOrderId())
@@ -43,6 +43,6 @@ public class TraceabilityUseCase {
     }
 
     public Flux<Traceability> getAllCompletedTraceability() {
-        return traceabilityGateway.findAllByNewStatusIsLike(PEDIDO_ENTREGADO);
+        return traceabilityGateway.findAllByNewStatusIsLike(DELIVERED);
     }
 }
